@@ -298,7 +298,7 @@ for i in range(math.floor((map_size * map_size) / dificuldade)):
     rx = random.randint(0, map_size-1)
     if (map[rx][ry] == '.'):
         creatures.append(
-            Creature(creature_types[random.randint(0, len(creature_types))], rx, ry))
+            Creature(creature_types[random.randint(0, len(creature_types)-1)], rx, ry))
 while True:
     maprint()
     char = getch.getch()
