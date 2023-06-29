@@ -82,7 +82,7 @@ map_size = menu(['pequeno', 'normal', 'grande', "enorme", "monstruoso", "colossa
 def maprint():
 	clear()
 	map = copy.deepcopy(emptymap)
-	for i in range(1, len(creatures) - 1):
+	for i in range(1, len(creatures)):
 		map[creatures[i]['x']][creatures[i]['y']] = pecas[creatures[i]['cor']][
 		 creatures[i]['type']]
 
@@ -90,7 +90,7 @@ def maprint():
 		map[creatures[0]['x']][creatures[0]['y']] = pecas[creatures[0]['cor']][
 		 creatures[0]['type']]
 	else:
-		map[creatures[0]["x"]][creatures[0]["y"]] = '\033[32m' + "☠" + "\033[0m"
+		map[creatures[0]["x"]][creatures[0]["y"]] = '\033[1m\033[31m' + "☠" + "\033[0m"
 
 	for x in range(map_size):
 		for y in range(map_size):
@@ -105,10 +105,9 @@ def maprint():
 			elif map[x][y] == '♙' :
 			    print('\033[34m' + map[x][y] + "\033[0m", end='')
 			elif map[x][y] == '♟':
-			    print('\033[32m' + map[x][y] + "\033[0m", end='')
+			    print('\033[1m\033[31m' + map[x][y] + "\033[0m", end='')
 			else:
 			    print(map[x][y], end='')
-			
 		print("")
 
 pecas = {
@@ -135,7 +134,7 @@ ia = {}
 
 
 def move(creature, position):
-	for i in range(len(creatures) - 1):
+	for i in range(len(creatures)):
 		if creatures[i]['x'] == position['x'] and creatures[i]['y'] == position['y']:
 			if i == 0:
 				creatures[0]['alive'] = False
@@ -188,7 +187,38 @@ def iabispo(creature):
 		destiny['y'] += 1
 		destiny['x'] -= 1
 		move(creature, destiny)
+		
+	elif creature['y'] > creatures[0]['y']:
+		destiny['y'] -= 1
+		destiny['x'] -= 1
+		if not move(creature, destiny):
+			destiny['y'] -= 1
+			destiny['x'] += 1
+			move(creature, destiny)
 
+	elif creature['y'] < creatures[0]['y']:
+		destiny['y'] += 1
+		destiny['x'] -= 1
+		if not move(creature, destiny):
+			destiny['y'] += 1
+			destiny['x'] += 1
+			move(creature, destiny)
+
+	elif creature['x'] < creatures[0]['x']:
+		destiny['y'] -= 1
+		destiny['x'] += 1
+		if not move(creature, destiny):
+			destiny['y'] += 1
+			destiny['x'] += 1
+			move(creature, destiny)
+
+	elif creature['x'] > creatures[0]['x']:
+		destiny['y'] += 1
+		destiny['x'] -= 1
+		if not move(creature, destiny):
+			destiny['y'] -= 1
+			destiny['x'] -= 1
+			move(creature, destiny)
 
 def iatorre(creature):
 	iapeao(creature)
@@ -289,30 +319,30 @@ while True:
 		getch.getch()  # Skip the [
 		arrow_key = getch.getch()
 		if arrow_key == 'A' and creatures[0]['x'] > 0:  #up
-			for i in range(1, len(creatures) - 1):
+			for i in range(1, len(creatures) ):
 				if creatures[i]['x'] == creatures[0]['x'] - 1 and creatures[i][
 				  'y'] == creatures[0]['y']:
 					creatures.remove(creatures[i])
 			creatures[0]['x'] -= 1
 		elif arrow_key == 'B' and creatures[0]['x'] < map_size - 1:  #down
-			for i in range(1, len(creatures) - 1):
+			for i in range(1, len(creatures) ):
 				if creatures[i]['x'] == creatures[0]['x'] + 1 and creatures[i][
 				  'y'] == creatures[0]['y']:
 					creatures.remove(creatures[i])
 			creatures[0]['x'] += 1
 		elif arrow_key == 'C' and creatures[0]['y'] < map_size - 1:  #right
-			for i in range(1, len(creatures) - 1):
+			for i in range(1, len(creatures) ):
 				if creatures[i]['x'] == creatures[0]['x'] and creatures[i][
 				  'y'] == creatures[0]['y'] + 1:
 					creatures.remove(creatures[i])
 			creatures[0]['y'] += 1
 		elif arrow_key == 'D' and creatures[0]['y'] > 0:  #left
-			for i in range(1, len(creatures) - 1):
+			for i in range(1, len(creatures)):
 				if creatures[i]['x'] == creatures[0]['x'] and creatures[i][
 				  'y'] == creatures[0]['y'] - 1:
 					creatures.remove(creatures[i])
 			creatures[0]['y'] -= 1
-		for i in range(1, len(creatures) - 1):
+		for i in range(1, len(creatures)):
 			ia[creatures[i]['type']](creatures[i])
 			maprint()
 			if not creatures[0]['alive']:
@@ -322,5 +352,6 @@ while True:
 		if not creatures[0]['alive']:
 			print("\033[31m☠ Você fracassou! Zumbi está morto. ☠\033[0m")
 			break
-		elif len(creatures) == 1:
-			print("\033[32m♚♛ Você venceu! Zumbi derrotou todos os fantasmas do imperio e pôde recuperar os bens roubados do seu povo. ♚♛\033[0m")
+		if len(creatures) == 1:
+			print("\033[32m♚♛ Você venceu! Zumbi derrotou todos os fantasmas do imperio e pôde recuperar os bens roubados do seu povo. ♛♚\033[0m")
+			break
