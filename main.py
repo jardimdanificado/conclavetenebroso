@@ -105,7 +105,7 @@ def maprint():
             creatures[0]['type']]
     else:
         map[creatures[0]["x"]][creatures[0]["y"]
-                               ] = '\033[32m' + "☠" + "\033[0m"
+                               ] = '\033[31m' + "☠" + "\033[0m"
 
     for x in range(map_size):
         for y in range(map_size):
@@ -120,7 +120,7 @@ def maprint():
             elif map[x][y] == '♙':
                 print('\033[34m' + map[x][y] + "\033[0m", end='')
             elif map[x][y] == '♟':
-                print('\033[32m' + map[x][y] + "\033[0m", end='')
+                print('\033[31m' + map[x][y] + "\033[0m", end='')
             else:
                 print(map[x][y], end='')
 
